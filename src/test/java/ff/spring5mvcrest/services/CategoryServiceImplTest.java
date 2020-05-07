@@ -6,8 +6,8 @@ import ff.spring5mvcrest.domain.Category;
 import ff.spring5mvcrest.repositories.CategoryRepository;
 
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.TestPropertySource;
@@ -27,7 +27,7 @@ public class CategoryServiceImplTest {
     @Mock
     CategoryRepository categoryRepository;
 
-   @Before
+   @BeforeEach
     public void setUp() throws Exception{
        MockitoAnnotations.initMocks(this);
 
