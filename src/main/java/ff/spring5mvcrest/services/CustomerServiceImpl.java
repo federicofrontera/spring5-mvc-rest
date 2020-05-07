@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id)
                 .map(customer -> {
                     CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-                    customerDTO.setCustomerURL("api/v1/customer/" + customer.getId());
+                    customerDTO.setCustomerURL("/api/v1/customer/" + customer.getId());
                     return customerDTO;
                 })
                 .orElseThrow(RuntimeException::new);
@@ -50,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
-        returnDTO.setCustomerURL("api/v1/customer/" + savedCustomer.getId());
+        returnDTO.setCustomerURL("/api/v1/customer/" + savedCustomer.getId());
 
         return returnDTO;
     }
