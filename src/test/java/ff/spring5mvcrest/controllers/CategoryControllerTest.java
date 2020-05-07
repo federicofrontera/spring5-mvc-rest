@@ -28,8 +28,8 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 public class CategoryControllerTest {
-    public static final String TEST_NAME_1 = "john";
-    public static final String TEST_NAME_2 = "policy";
+    public static final String TEST_NAME_1 = "fruits";
+    public static final String TEST_NAME_2 = "dried";
 
     @Mock
     CategoryService categoryService;
@@ -74,7 +74,7 @@ public class CategoryControllerTest {
 
         when(categoryService.getCategoryByName(anyString())).thenReturn(category1);
 
-        mockMvc.perform(get("/api/v1/categories/john")
+        mockMvc.perform(get("/api/v1/categories/fruits")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(TEST_NAME_1)));
