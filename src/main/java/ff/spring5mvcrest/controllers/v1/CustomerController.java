@@ -25,9 +25,9 @@ public class CustomerController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CustomerDTO> getCategoryByName(@PathVariable String id){
+    public ResponseEntity<CustomerDTO> getCategoryByName(@PathVariable Long id){
         return new ResponseEntity<CustomerDTO>(
-                customerService.getCustomerById(Long.valueOf(id)),HttpStatus.OK);
+                customerService.getCustomerById(id),HttpStatus.OK);
 
     }
 
@@ -35,5 +35,11 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO){
         return new ResponseEntity<CustomerDTO>(
                 customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable Long id){
+        return new ResponseEntity<CustomerDTO>(
+                customerService.saveCustomerByDTO(id, customerDTO), HttpStatus.OK);
     }
 }
