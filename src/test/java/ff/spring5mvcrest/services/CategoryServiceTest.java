@@ -35,7 +35,7 @@ public class CategoryServiceTest {
    }
 
    @Test
-    public void getAllCategoriesTest() throws Exception{
+    public void testGetAllCategories() throws Exception{
        //given
        List<Category> categories = Arrays.asList(new Category(), new Category(), new Category());
        when(categoryRepository.findAll()).thenReturn(categories);
@@ -48,7 +48,7 @@ public class CategoryServiceTest {
    }
 
    @Test
-    public void getCategoryByName() throws Exception{
+    public void testGetCategoryByName() throws Exception{
        //given
        Category category = new Category();
        category.setId(ID);
