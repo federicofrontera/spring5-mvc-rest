@@ -90,7 +90,7 @@ public class VendorControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void patchVendor() throws Exception {
-        given(vendorService.saveVendorByDTO(anyLong(), any(VendorDTO.class))).willReturn(vendorDTO_1);
+        given(vendorService.patchVendor(anyLong(), any(VendorDTO.class))).willReturn(vendorDTO_1);
 
         mockMvc.perform(patch(VendorController.BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
