@@ -6,13 +6,11 @@ import ff.spring5mvcrest.bootstrap.Bootstrap;
 import ff.spring5mvcrest.domain.Customer;
 import ff.spring5mvcrest.repositories.CategoryRepository;
 import ff.spring5mvcrest.repositories.CustomerRepository;
-import org.junit.Before;
+import ff.spring5mvcrest.repositories.VendorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -27,6 +25,8 @@ public class CustomerServiceImplIT {
     CustomerRepository customerRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    VendorRepository vendorRepository;
 
     CustomerService customerService;
 
@@ -35,7 +35,7 @@ public class CustomerServiceImplIT {
         System.out.println("Loading Customer data..." + customerRepository.count());
 
         //setup data for testing
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);
