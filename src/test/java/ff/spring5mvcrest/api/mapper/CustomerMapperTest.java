@@ -15,7 +15,7 @@ public class CustomerMapperTest {
     CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
     @Test
-    public void CategoryToCategoryDTOTest() throws Exception {
+    public void customerToCustomerDTOTest() throws Exception {
         //given
         Customer customer = new Customer();
         customer.setId(Long.valueOf(ID));
