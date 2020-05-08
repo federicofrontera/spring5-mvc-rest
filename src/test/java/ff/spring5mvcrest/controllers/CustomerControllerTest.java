@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.print.attribute.standard.Media;
 import java.util.Arrays;
 
 
@@ -129,6 +130,27 @@ public class CustomerControllerTest extends AbstractRestControllerTest{
 
     }
 
+    @Test
+    public void patchCustomer() throws Exception{
+        //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname("John");
+
+        CustomerDTO returnDTO = new CustomerDTO();
+        returnDTO.setFirstname(customerDTO.getFirstname());
+        returnDTO.setLastname("Thompson");
+        returnDTO.setCustomerURL("/api/v1/customers/1");
+
+        when(customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+
+        mockMvc.perform(patch("/api/v1/customers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo("John")))
+                .andExpect(jsonPath("$.lastname", equalTo("Thompson")))
+                .andExpect(jsonPath("$.customerURL", equalTo("/api/v1/customers/1")));
+    }
 
 
 }
