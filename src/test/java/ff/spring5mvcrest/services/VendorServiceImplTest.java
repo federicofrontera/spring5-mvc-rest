@@ -3,6 +3,7 @@ package ff.spring5mvcrest.services;
 import ff.spring5mvcrest.api.mapper.VendorMapper;
 import ff.spring5mvcrest.api.model.CustomerDTO;
 import ff.spring5mvcrest.api.model.VendorDTO;
+import ff.spring5mvcrest.api.model.VendorListDTO;
 import ff.spring5mvcrest.controllers.v1.CustomerController;
 import ff.spring5mvcrest.controllers.v1.VendorController;
 import ff.spring5mvcrest.domain.Customer;
@@ -15,11 +16,17 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
 
 public class VendorServiceImplTest {
     private final String TEST_NAME_1 = "test vendor 1";
@@ -47,10 +54,10 @@ public class VendorServiceImplTest {
         when(vendorRepository.findAll()).thenReturn(Arrays.asList(vendor1, vendor2));
 
         //when
-        List<VendorDTO> vendorDTOList = vendorService.getAllVendors();
+        VendorListDTO vendorDTOList = vendorService.getAllVendors();
 
         //then
-        assertEquals(2, vendorDTOList.size());
+        assertEquals(2, vendorDTOList.getVendors().size());
     }
 
     @Test
@@ -106,5 +113,35 @@ public class VendorServiceImplTest {
         assertEquals(savedVendor.getName(), savedDTO.getName());
         assertEquals(VendorController.BASE_URL + "/" + ID, savedDTO.getVendorURL());
     }
+
+    @Test
+    public void patchVendor() throws Exception{
+        //given
+        VendorDTO vendorDTO = new VendorDTO();
+        vendorDTO.setName(TEST_NAME_1);
+
+        Vendor vendor = new Vendor();
+        vendor.setName(TEST_NAME_1);
+
+        given(vendorRepository.findById(anyLong())).willReturn(Optional.of(vendor));
+        given(vendorRepository.save(any(Vendor.class))).willReturn(vendor);
+
+        //when
+
+        VendorDTO savedVendorDTO = vendorService.patchVendor(ID, vendorDTO);
+
+        //then
+        // 'should' defaults to times = 1
+        then(vendorRepository).should().save(any(Vendor.class));
+        then(vendorRepository).should(times(1)).findById(anyLong());
+        assertThat(savedVendorDTO.getVendorURL(), containsString("1"));
+    }
+
+    @Test
+    public void deleteVendor() throws Exception{
+        vendorRepository.deleteById(ID);
+        verify(vendorRepository, times(1)).deleteById(anyLong());
+    }
+    
 
 }

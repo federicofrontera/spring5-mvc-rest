@@ -3,16 +3,19 @@ package ff.spring5mvcrest.services;
 import ff.spring5mvcrest.api.mapper.VendorMapper;
 import ff.spring5mvcrest.api.model.CustomerDTO;
 import ff.spring5mvcrest.api.model.VendorDTO;
+import ff.spring5mvcrest.api.model.VendorListDTO;
 import ff.spring5mvcrest.controllers.v1.CustomerController;
 import ff.spring5mvcrest.controllers.v1.VendorController;
 import ff.spring5mvcrest.domain.Customer;
 import ff.spring5mvcrest.domain.Vendor;
 import ff.spring5mvcrest.exceptions.ResourceNotFoundException;
 import ff.spring5mvcrest.repositories.VendorRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class VendorServiceImpl implements VendorService {
     private final VendorMapper vendorMapper;
     private final VendorRepository vendorRepository;
@@ -23,14 +26,14 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public List<VendorDTO> getAllVendors() {
-        return vendorRepository.findAll()
+    public VendorListDTO getAllVendors() {
+        return new VendorListDTO(vendorRepository.findAll()
                 .stream()
                 .map(vendor -> {
                     VendorDTO vendorDTO = vendorMapper.vendorToVendorDTO(vendor);
                     vendorDTO.setVendorURL(getVendorURL(vendor.getId()));
                     return vendorDTO;
-                }).collect(Collectors.toList());
+                }).collect(Collectors.toList()));
     }
 
     @Override
@@ -57,12 +60,20 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public VendorDTO patchVendor(Long id, VendorDTO vendorDTO) {
-        return null;
+        return vendorRepository.findById(id)
+                .map(vendor -> {
+                    if(vendorDTO.getName() != null){
+                        vendor.setName(vendorDTO.getName());
+                    }
+                    VendorDTO returnDTO = vendorMapper.vendorToVendorDTO(vendorRepository.save(vendor));
+                    returnDTO.setVendorURL(getVendorURL(id));
+                    return returnDTO;
+                }).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public void deleteVendorById(Long id) {
-
+        vendorRepository.deleteById(id);
     }
 
     private String getVendorURL(Long id){

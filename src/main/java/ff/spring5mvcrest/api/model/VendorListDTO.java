@@ -1,7 +1,13 @@
 package ff.spring5mvcrest.api.model;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class VendorListDTO {
-private List<VendorDTO> vendors;
+List<VendorDTO> vendors;
 }
