@@ -2,6 +2,7 @@ package ff.spring5mvcrest.services;
 
 import ff.spring5mvcrest.api.mapper.CustomerMapper;
 import ff.spring5mvcrest.api.model.CustomerDTO;
+import ff.spring5mvcrest.controllers.v1.CustomerController;
 import ff.spring5mvcrest.domain.Customer;
 import ff.spring5mvcrest.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,15 +87,15 @@ public class CustomerServiceImplTest {
         savedCustomer.setLastname(customerDTO.getLastname());
         savedCustomer.setId(1l);
 
-        //when(customerRepository .save(any(Customer.class))).thenReturn(savedCustomer);
-        when(customerRepository.save(any())).thenReturn(savedCustomer);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
 
         //when
         CustomerDTO savedDto = customerService.createNewCustomer(customerDTO);
 
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
-        assertEquals("/api/v1/customer/1", savedDto.getCustomerURL());
+        assertEquals(CustomerController.BASE_URL + "/1", savedDto.getCustomerURL());
     }
 
     @Test
@@ -116,7 +117,7 @@ public class CustomerServiceImplTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
-        assertEquals("/api/v1/customer/1", savedDto.getCustomerURL());
+        assertEquals(CustomerController.BASE_URL + "/1", savedDto.getCustomerURL());
     }
 
     @Test
