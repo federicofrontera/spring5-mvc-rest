@@ -1,8 +1,11 @@
 package ff.spring5mvcrest.controllers;
 
 import ff.spring5mvcrest.api.model.CustomerDTO;
+import ff.spring5mvcrest.controllers.v1.CategoryController;
 import ff.spring5mvcrest.controllers.v1.CustomerController;
+import ff.spring5mvcrest.controllers.v1.RestResponseEntityExceptionHandler;
 import ff.spring5mvcrest.domain.Customer;
+import ff.spring5mvcrest.exceptions.ResourceNotFoundException;
 import ff.spring5mvcrest.services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +41,9 @@ public class CustomerControllerTest extends AbstractRestControllerTest{
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(RestResponseEntityExceptionHandler.class)
+                .build();
     }
 
     @Test
@@ -160,5 +165,14 @@ public class CustomerControllerTest extends AbstractRestControllerTest{
                 .andExpect(status().isOk());
 
         verify(customerService).deleteCustomerById(anyLong());
+    }
+
+    @Test
+    public void testGetByNameNotFound() throws Exception{
+        when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CategoryController.BASE_URL + "/foo")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
